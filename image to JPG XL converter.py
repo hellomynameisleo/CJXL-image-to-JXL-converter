@@ -41,7 +41,7 @@ def process_image(file):
     unique_id = str(uuid.uuid4())
     output_file = temporary_path.joinpath(file.stem + "_" + unique_id + file.suffix)
     temporary_file = output_file.with_suffix('.jxl')
-    destination_file = file.with_suffix('.jxl')
+    destination_file = file.with_suffix(file.suffix)
     temp = "_temp"
 	
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -68,10 +68,12 @@ def process_image(file):
                     current_time = datetime.now().strftime("Date=%d-%m-%Y | Time=%H:%M:%S")
                     f.write(f"{current_time} | {destination_file} - Done: magick compare returned {result.returncode}\n")
                     print(f"{destination_file} - Done")
-                    temporary_file.rename(destination_file)
+                    temporary_file.rename(destination_file.with_suffix('.jxl'))
 					# Removes the original moved image file and output_file2 temp file
                     decoded_file.unlink()
                     output_file.unlink()
+                total_counter['processed'] += 1
+                print(f"Current images processed: {total_counter['processed']}/{total_counter['submitted']}")
             else:
                 with log_file_error.open(mode='a', encoding='utf-8') as f:
                     current_time = datetime.now().strftime("Date=%d-%m-%Y | Time=%H:%M:%S")
@@ -82,9 +84,7 @@ def process_image(file):
 					# Removes the output_file2 temp file and cjxl processed temporary_file file
                     decoded_file.unlink()
                     temporary_file.unlink()
-        
-            total_counter['processed'] += 1
-            print(f"Current images processed: {total_counter['processed']}/{total_counter['submitted']}")
+
         except subprocess.CalledProcessError as error:
             # Log the error message and continue processing remaining files
             error_msg = error.stderr.decode('utf-8').strip()
@@ -106,14 +106,11 @@ def process_image(file):
         finally:
             # Move the image back to the original location and delete the temporary files
             if output_file.exists() and result.returncode == 0:
-                output_file.rename(file)
+                output_file.rename(file.with_suffix('.jxl'))
             elif destination_file.exists() and result.returncode != 0:
                 destination_file.rename(file)
             if temporary_file.exists():
                 temporary_file.unlink
-            
-            # Move the image back to the original location
-            destination_file.rename(destination_file.with_suffix('.jxl'))
     asyncio.run(compress_and_decode())
 	
 total_counter = Counter()

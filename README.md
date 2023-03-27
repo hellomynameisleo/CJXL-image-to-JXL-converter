@@ -11,7 +11,7 @@ Has multi process, just change the default amount of workers in the script
 
 Will only work with lossless mode -d 0 or -q 100 as it uses imagemagick
 
-Will use decode the processed jxl image and use imagemagick magick compare to verify the image is lossless and if not keep the original image file and discard the processed jxl image
+Will decode the processed jxl image and use imagemagick magick compare to verify the image is lossless and if not keep the original image file and discard the processed jxl image
 
 If CJXL throws an error it will keep the original image
 

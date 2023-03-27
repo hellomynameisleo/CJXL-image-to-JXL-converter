@@ -1,5 +1,5 @@
 # CJXL-image-to-JXL-converter
-converts all jpg, jpeg, webp and png images in a directory recursivly to JXL
+converts all jpg, jpeg, webp and png images in a directory recursively to JXL
 
 Will skip files with ascii filenames in them as CJXL can't handle it
 

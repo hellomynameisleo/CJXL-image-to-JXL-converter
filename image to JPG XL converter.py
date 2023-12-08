@@ -58,17 +58,6 @@ while True:
         else:
             print(f"Invalid input, try again")
 
-    while True:
-        distance = input("Input the distance processing setting (0-15): ")
-        if distance.isdigit():
-            distance = int(distance)
-            if distance >= 0 and distance <= 15:
-                break
-            else:
-                print(f"Invalid input, try again")
-        else:
-            print(f"Invalid input, try again")
-
     #calculate inputted directory foldersize
     for dirpath, _, filenames in os.walk(directory_path):
         for filename in filenames:
@@ -123,7 +112,7 @@ while True:
 
         async def compress_and_decode():
             try:
-                subprocess.run(["cjxl", str(output_file), "--distance", f"{distance}", "--effort", f"{effort}", str(temporary_file)], stderr=subprocess.PIPE, check=True)
+                subprocess.run(["cjxl", str(output_file), "--distance", "0", "--effort", f"{effort}", str(temporary_file)], stderr=subprocess.PIPE, check=True)
 
             except subprocess.CalledProcessError as error:
                 with log_file_error.open(mode='a', encoding='utf-8') as f:
